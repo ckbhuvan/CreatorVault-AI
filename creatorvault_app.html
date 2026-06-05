@@ -1,0 +1,1276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreatorVault</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#16161f;--bg4:#1c1c28;--bg5:#22223a;
+  --border:#ffffff12;--border2:#ffffff20;--border3:#ffffff35;
+  --text:#f0f0ff;--text2:#a0a0c0;--text3:#606080;
+  --purple:#7c3aed;--purple2:#9f67fa;--purple3:#c4a8ff;--purpleGlow:#7c3aed40;
+  --blue:#2563eb;--blue2:#60a5fa;--blueGlow:#2563eb30;
+  --green:#10b981;--red:#ef4444;--amber:#f59e0b;
+  --radius:12px;--radius2:8px;--radius3:16px;
+  --sidebar:240px;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+#app{display:flex;min-height:100vh}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--bg5);border-radius:4px}
+
+/* AUTH PAGE */
+.auth-page{display:flex;align-items:center;justify-content:center;min-height:100vh;width:100%;background:radial-gradient(ellipse at 30% 20%,#1a0a3a 0%,var(--bg) 60%),radial-gradient(ellipse at 80% 80%,#0a1a3a 0%,transparent 50%)}
+.auth-card{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius3);padding:48px;width:100%;max-width:440px;position:relative;overflow:hidden}
+.auth-card::before{content:'';position:absolute;top:-1px;left:20%;right:20%;height:1px;background:linear-gradient(90deg,transparent,var(--purple2),transparent)}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:32px}
+.auth-logo-icon{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:20px}
+.auth-logo-text{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;background:linear-gradient(135deg,var(--purple3),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.auth-title{font-size:26px;font-weight:700;margin-bottom:6px}
+.auth-sub{color:var(--text2);font-size:14px;margin-bottom:32px}
+.form-group{margin-bottom:20px}
+.form-label{display:block;font-size:13px;font-weight:500;color:var(--text2);margin-bottom:8px}
+.form-input{width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius2);padding:12px 16px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:all 0.2s}
+.form-input:focus{border-color:var(--purple2);box-shadow:0 0 0 3px var(--purpleGlow)}
+.form-input::placeholder{color:var(--text3)}
+.btn{width:100%;padding:13px;border-radius:var(--radius2);font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff}
+.btn-primary:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-outline{background:transparent;border:1px solid var(--border2);color:var(--text2);margin-top:12px}
+.btn-outline:hover{border-color:var(--purple2);color:var(--purple3)}
+.auth-hint{font-size:12px;color:var(--text3);margin-top:24px;text-align:center}
+.auth-hint span{color:var(--purple3)}
+
+/* LAYOUT */
+.layout{display:flex;width:100%;min-height:100vh}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:100;overflow-y:auto}
+.sidebar-logo{padding:20px 20px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border)}
+.sidebar-logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.sidebar-logo-text{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;background:linear-gradient(135deg,var(--purple3),var(--blue2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sidebar-nav{padding:16px 12px;flex:1}
+.sidebar-section{margin-bottom:24px}
+.sidebar-section-label{font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:1px;padding:0 8px;margin-bottom:8px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius2);cursor:pointer;transition:all 0.2s;margin-bottom:2px;color:var(--text2);font-size:13px;font-weight:500;text-decoration:none;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--bg4);color:var(--text)}
+.nav-item.active{background:var(--purpleGlow);color:var(--purple3);border:1px solid var(--purple)30}
+.nav-item svg{width:16px;height:16px;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--purple);color:#fff;font-size:10px;font-weight:600;padding:2px 6px;border-radius:10px}
+.sidebar-bottom{padding:12px;border-top:1px solid var(--border)}
+.user-info{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius2);cursor:pointer}
+.user-info:hover{background:var(--bg4)}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
+.user-name{font-size:13px;font-weight:500}
+.user-role{font-size:11px;color:var(--text3)}
+.logout-btn{width:100%;margin-top:8px;padding:8px;background:none;border:1px solid var(--border);border-radius:var(--radius2);color:var(--text3);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.logout-btn:hover{border-color:var(--red);color:var(--red)}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;min-height:100vh;display:flex;flex-direction:column}
+.topbar{padding:16px 28px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg2);backdrop-filter:blur(10px);position:sticky;top:0;z-index:50}
+.topbar-title{font-size:18px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius2);padding:8px 14px;font-size:13px;color:var(--text2);cursor:text}
+.search-box input{background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;width:180px}
+.search-box input::placeholder{color:var(--text3)}
+.icon-btn{width:36px;height:36px;border-radius:var(--radius2);background:var(--bg4);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);transition:all 0.2s}
+.icon-btn:hover{border-color:var(--purple2);color:var(--purple3)}
+.content{padding:28px;flex:1;overflow-y:auto}
+
+/* STATS GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:relative;overflow:hidden;transition:all 0.3s}
+.stat-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.stat-card::after{content:'';position:absolute;top:0;right:0;width:80px;height:80px;border-radius:50%;opacity:0.06;filter:blur(20px)}
+.stat-card.purple::after{background:var(--purple)}
+.stat-card.blue::after{background:var(--blue)}
+.stat-card.green::after{background:var(--green)}
+.stat-card.amber::after{background:var(--amber)}
+.stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:18px}
+.stat-icon.purple{background:var(--purpleGlow);color:var(--purple3)}
+.stat-icon.blue{background:var(--blueGlow);color:var(--blue2)}
+.stat-icon.green{background:#10b98120;color:var(--green)}
+.stat-icon.amber{background:#f59e0b20;color:var(--amber)}
+.stat-value{font-size:28px;font-weight:700;font-family:'Space Grotesk',sans-serif;margin-bottom:4px}
+.stat-label{font-size:12px;color:var(--text2);font-weight:500}
+.stat-change{font-size:11px;margin-top:8px;display:flex;align-items:center;gap:4px}
+.stat-change.up{color:var(--green)}
+.stat-change.down{color:var(--red)}
+
+/* CARDS */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.card-title{font-size:14px;font-weight:600;font-family:'Space Grotesk',sans-serif;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.card-title-left{display:flex;align-items:center;gap:8px}
+
+/* GRID LAYOUTS */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+
+/* ACTIVITY FEED */
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.activity-dot.purple{background:var(--purple2)}
+.activity-dot.blue{background:var(--blue2)}
+.activity-dot.green{background:var(--green)}
+.activity-dot.amber{background:var(--amber)}
+.activity-text{font-size:13px;line-height:1.5}
+.activity-text strong{font-weight:600}
+.activity-time{font-size:11px;color:var(--text3);margin-top:2px}
+
+/* PROJECTS */
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.project-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.project-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.project-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.project-badge{font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px}
+.badge-youtube{background:#ff000020;color:#ff6060;border:1px solid #ff000030}
+.badge-short{background:#ff600020;color:#ff9060;border:1px solid #ff600030}
+.badge-instagram{background:#e40a7020;color:#f060c0;border:1px solid #e40a7030}
+.badge-stream{background:#9147ff20;color:#b980ff;border:1px solid #9147ff30}
+.badge-sponsor{background:#10b98120;color:#4fd1a0;border:1px solid #10b98130}
+.badge-brand{background:#3b82f620;color:#60a5fa;border:1px solid #3b82f630}
+.project-name{font-size:15px;font-weight:600;margin-bottom:6px;font-family:'Space Grotesk',sans-serif}
+.project-desc{font-size:12px;color:var(--text2);line-height:1.5;margin-bottom:14px}
+.project-meta{display:flex;align-items:center;gap:12px;font-size:11px;color:var(--text3)}
+.project-meta span{display:flex;align-items:center;gap:4px}
+.project-actions{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.action-btn{flex:1;padding:7px;border-radius:var(--radius2);font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:none;color:var(--text2);transition:all 0.2s;font-family:'DM Sans',sans-serif}
+.action-btn:hover{border-color:var(--purple2);color:var(--purple3)}
+.action-btn.danger:hover{border-color:var(--red);color:var(--red)}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--text3);border-bottom:1px solid var(--border)}
+td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg4)}
+
+/* STATUS BADGES */
+.status{font-size:11px;font-weight:600;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:4px}
+.status::before{content:'';width:5px;height:5px;border-radius:50%}
+.status-draft{background:#ffffff10;color:var(--text2)}.status-draft::before{background:var(--text3)}
+.status-review{background:#f59e0b20;color:var(--amber)}.status-review::before{background:var(--amber)}
+.status-approved{background:#10b98120;color:var(--green)}.status-approved::before{background:var(--green)}
+.status-published{background:#3b82f620;color:var(--blue2)}.status-published::before{background:var(--blue2)}
+.status-active{background:#10b98120;color:var(--green)}.status-active::before{background:var(--green)}
+.status-expired{background:#ef444420;color:var(--red)}.status-expired::before{background:var(--red)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:#00000090;backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:var(--bg3);border:1px solid var(--border2);border-radius:var(--radius3);padding:28px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto}
+.modal-title{font-size:18px;font-weight:700;font-family:'Space Grotesk',sans-serif;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{width:28px;height:28px;border-radius:6px;background:var(--bg4);border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:14px}
+.modal-close:hover{border-color:var(--red);color:var(--red)}
+.modal-actions{display:flex;gap:10px;margin-top:24px}
+.modal-btn{flex:1;padding:11px;border-radius:var(--radius2);font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;border:none}
+.modal-btn.primary{background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff}
+.modal-btn.primary:hover{opacity:0.9}
+.modal-btn.secondary{background:var(--bg4);border:1px solid var(--border2);color:var(--text2)}
+.modal-btn.secondary:hover{border-color:var(--border3)}
+.form-select{width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius2);padding:12px 16px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;appearance:none;cursor:pointer}
+.form-select:focus{border-color:var(--purple2)}
+.form-textarea{width:100%;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius2);padding:12px 16px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;outline:none;resize:vertical;min-height:80px}
+.form-textarea:focus{border-color:var(--purple2)}
+
+/* PAGE HEADER */
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.page-title{font-size:22px;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.page-sub{font-size:13px;color:var(--text2);margin-top:3px}
+.add-btn{display:flex;align-items:center;gap:6px;padding:10px 18px;border-radius:var(--radius2);background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;font-size:13px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+.add-btn:hover{opacity:0.9;transform:translateY(-1px)}
+
+/* SEARCH BAR */
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius2);padding:10px 16px;margin-bottom:20px}
+.search-bar input{background:none;border:none;outline:none;color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;flex:1}
+.search-bar input::placeholder{color:var(--text3)}
+
+/* VERSION TIMELINE */
+.version-timeline{position:relative;padding-left:28px}
+.version-timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:1px;background:var(--border2)}
+.version-item{position:relative;margin-bottom:20px}
+.version-dot{position:absolute;left:-24px;top:12px;width:12px;height:12px;border-radius:50%;background:var(--purple2);border:2px solid var(--bg3);box-shadow:0 0 8px var(--purple)}
+.version-dot.latest{background:var(--green);box-shadow:0 0 8px var(--green)}
+.version-box{background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius2);padding:14px 16px}
+.version-box:hover{border-color:var(--border2)}
+.version-num{font-size:13px;font-weight:600;font-family:'Space Grotesk',sans-serif;margin-bottom:4px;display:flex;align-items:center;gap:8px}
+.version-date{font-size:11px;color:var(--text3)}
+.version-note{font-size:12px;color:var(--text2);margin-top:6px;line-height:1.5}
+
+/* ANALYTICS */
+.chart-bar{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:12px}
+.bar{flex:1;border-radius:4px 4px 0 0;transition:all 0.3s;position:relative;cursor:pointer;min-width:0}
+.bar:hover{opacity:0.8}
+.bar-label{font-size:9px;color:var(--text3);text-align:center;margin-top:4px}
+.pie-wrap{display:flex;align-items:center;gap:20px}
+.pie-legend{flex:1}
+.pie-legend-item{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:12px}
+.pie-legend-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.pie-legend-val{margin-left:auto;font-weight:600;font-family:'Space Grotesk',sans-serif}
+
+/* SHARE LINK */
+.share-link-box{display:flex;align-items:center;gap:8px;background:var(--bg4);border:1px solid var(--border2);border-radius:var(--radius2);padding:10px 14px}
+.share-link-text{font-size:12px;color:var(--blue2);font-family:'DM Mono',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.copy-btn{padding:5px 12px;background:var(--purple);color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif}
+.copy-btn:hover{background:var(--purple2)}
+
+/* SETTINGS */
+.settings-section{margin-bottom:32px}
+.settings-section-title{font-size:15px;font-weight:600;font-family:'Space Grotesk',sans-serif;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+.settings-row:last-child{border-bottom:none}
+.settings-label{font-size:14px;font-weight:500}
+.settings-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.toggle{width:40px;height:22px;border-radius:11px;background:var(--bg5);border:none;cursor:pointer;position:relative;transition:all 0.2s;flex-shrink:0}
+.toggle.on{background:var(--purple)}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:all 0.2s}
+.toggle.on::after{left:21px}
+.storage-bar{background:var(--bg5);border-radius:4px;height:6px;margin-top:8px;overflow:hidden}
+.storage-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--purple),var(--blue))}
+
+/* EMPTY STATE */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;text-align:center;color:var(--text2)}
+.empty-icon{font-size:48px;margin-bottom:16px;opacity:0.4}
+.empty-title{font-size:16px;font-weight:600;font-family:'Space Grotesk',sans-serif;margin-bottom:8px;color:var(--text)}
+.empty-sub{font-size:13px;color:var(--text2);max-width:300px;line-height:1.5}
+
+/* CHIP */
+.chip{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--bg5);color:var(--text2);display:inline-flex;align-items:center;gap:4px}
+
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius2);padding:4px}
+.tab{padding:8px 18px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;color:var(--text2);transition:all 0.2s;border:none;background:none;font-family:'DM Sans',sans-serif}
+.tab.active{background:var(--purpleGlow);color:var(--purple3);border:1px solid var(--purple)30}
+.tab:hover:not(.active){color:var(--text)}
+
+/* TOOLTIP */
+.tooltip{position:relative}
+.tooltip:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--border2);border-radius:6px;padding:5px 10px;font-size:11px;white-space:nowrap;z-index:100}
+
+/* notification */
+.notif{position:fixed;top:20px;right:20px;background:var(--bg3);border:1px solid var(--green)50;border-radius:var(--radius2);padding:12px 18px;font-size:13px;font-weight:500;color:var(--green);z-index:999;display:flex;align-items:center;gap:8px;box-shadow:0 8px 32px #00000060;transform:translateY(-10px);opacity:0;transition:all 0.3s;pointer-events:none}
+.notif.show{transform:translateY(0);opacity:1}
+.notif.error{color:var(--red);border-color:var(--red)50}
+
+/* ASSET TYPE ICON */
+.asset-type-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.type-thumbnail{background:#9f67fa20;color:#c4a8ff}
+.type-script{background:#10b98120;color:var(--green)}
+.type-video{background:#3b82f620;color:var(--blue2)}
+.type-logo{background:#f59e0b20;color:var(--amber)}
+.type-audio{background:#ef444420;color:var(--red)}
+
+@media(max-width:900px){
+  .sidebar{width:60px}
+  .sidebar-logo-text,.nav-item span,.sidebar-section-label,.user-name,.user-role{display:none}
+  .main{margin-left:60px}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .projects-grid{grid-template-columns:1fr}
+  .two-col{grid-template-columns:1fr}
+  .three-col{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+// ===== DATA LAYER =====
+const DEMO_USER = {email:'copper@creatorvault.com',name:'Copper',role:'Content Creator',channel:'CopperPlays',avatar:'CP'};
+const SEED_PROJECTS = [
+  {id:'p1',name:'Volleyball Legends Highlights',desc:'Weekly highlights compilation from VB tournaments and matches',category:'YouTube Video',createdAt:'2024-05-10',assets:8,color:'badge-youtube'},
+  {id:'p2',name:'Funny Roblox Moments',desc:'Comedy gaming content with funny moments, fails, and collabs',category:'YouTube Shorts',createdAt:'2024-05-12',assets:5,color:'badge-short'},
+  {id:'p3',name:'Sponsor Campaign – GameFuel',desc:'Brand deal integration for Q2 2024 GameFuel energy drink campaign',category:'Sponsorship',createdAt:'2024-05-18',assets:12,color:'badge-sponsor'},
+  {id:'p4',name:'Channel Rebrand 2024',desc:'Full visual identity overhaul including logos, banners, overlays',category:'Branding',createdAt:'2024-05-20',assets:7,color:'badge-brand'},
+  {id:'p5',name:'Late Night Stream Sessions',desc:'Chill gaming stream content and highlight reels',category:'Stream Content',createdAt:'2024-05-22',assets:3,color:'badge-stream'},
+];
+const SEED_ASSETS = [
+  {id:'a1',projectId:'p1',name:'VB_Thumbnail_v3_Final.png',type:'Thumbnail',status:'Published',uploadDate:'2024-05-15',size:'2.4 MB',versions:3},
+  {id:'a2',projectId:'p1',name:'Episode_23_Script.docx',type:'Script',status:'Approved',uploadDate:'2024-05-14',size:'84 KB',versions:2},
+  {id:'a3',projectId:'p1',name:'Match_Highlights_Raw.mp4',type:'Video Clip',status:'Review',uploadDate:'2024-05-13',size:'1.2 GB',versions:1},
+  {id:'a4',projectId:'p2',name:'Roblox_Fail_Compilation.mp4',type:'Video Clip',status:'Draft',uploadDate:'2024-05-16',size:'780 MB',versions:1},
+  {id:'a5',projectId:'p2',name:'Short_Thumbnail_v2.jpg',type:'Thumbnail',status:'Approved',uploadDate:'2024-05-17',size:'1.8 MB',versions:2},
+  {id:'a6',projectId:'p3',name:'GameFuel_Script_v1.docx',type:'Script',status:'Review',uploadDate:'2024-05-19',size:'120 KB',versions:1},
+  {id:'a7',projectId:'p3',name:'Channel_Logo_v2.svg',type:'Logo',status:'Published',uploadDate:'2024-05-20',size:'45 KB',versions:2},
+  {id:'a8',projectId:'p3',name:'Sponsor_Jingle.mp3',type:'Audio',status:'Approved',uploadDate:'2024-05-21',size:'3.2 MB',versions:1},
+  {id:'a9',projectId:'p4',name:'Main_Channel_Logo.svg',type:'Logo',status:'Published',uploadDate:'2024-05-21',size:'88 KB',versions:4},
+  {id:'a10',projectId:'p5',name:'Stream_Overlay_v1.png',type:'Thumbnail',status:'Draft',uploadDate:'2024-05-23',size:'5.1 MB',versions:1},
+];
+const SEED_VERSIONS = {
+  a1:[
+    {version:1,date:'2024-05-10',note:'Initial design – blue background with player shot',uploadedBy:'Copper'},
+    {version:2,date:'2024-05-12',note:'Updated color scheme, added text overlay and glow effects',uploadedBy:'Copper'},
+    {version:3,date:'2024-05-15',note:'Final approved version – client feedback incorporated',uploadedBy:'Copper'},
+  ],
+  a2:[
+    {version:1,date:'2024-05-12',note:'First draft of episode script',uploadedBy:'Copper'},
+    {version:2,date:'2024-05-14',note:'Added sponsor segment, revised intro hook',uploadedBy:'Copper'},
+  ],
+  a9:[
+    {version:1,date:'2024-05-15',note:'Initial concept sketch',uploadedBy:'Copper'},
+    {version:2,date:'2024-05-17',note:'Color revision – switched to gradient style',uploadedBy:'Copper'},
+    {version:3,date:'2024-05-19',note:'Added drop shadow and variants',uploadedBy:'Copper'},
+    {version:4,date:'2024-05-21',note:'Final approved logo – ready for export',uploadedBy:'Copper'},
+  ]
+};
+const SEED_SHARES = [
+  {id:'sh1',assetId:'a1',assetName:'VB_Thumbnail_v3_Final.png',sharedWith:'Editor Mike',expiryDate:'2024-06-30',createdAt:'2024-05-15',code:'VB3TH8',status:'active'},
+  {id:'sh2',assetId:'a7',assetName:'Channel_Logo_v2.svg',sharedWith:'Brand Manager',expiryDate:'2024-06-15',createdAt:'2024-05-20',code:'LG2BM5',status:'active'},
+  {id:'sh3',assetId:'a2',assetName:'Episode_23_Script.docx',sharedWith:'Writer Team',expiryDate:'2024-05-01',createdAt:'2024-04-20',code:'EP23W9',status:'expired'},
+];
+const SEED_LOGS = [
+  {id:'l1',action:'Project Created',details:'Volleyball Legends Highlights',user:'Copper',timestamp:'2024-05-10 09:15'},
+  {id:'l2',action:'Asset Uploaded',details:'VB_Thumbnail_v3_Final.png',user:'Copper',timestamp:'2024-05-10 09:32'},
+  {id:'l3',action:'Version Added',details:'Thumbnail v2 uploaded',user:'Copper',timestamp:'2024-05-12 14:10'},
+  {id:'l4',action:'Asset Shared',details:'Thumbnail shared with Editor Mike',user:'Copper',timestamp:'2024-05-15 11:20'},
+  {id:'l5',action:'Project Created',details:'Sponsor Campaign – GameFuel',user:'Copper',timestamp:'2024-05-18 10:00'},
+  {id:'l6',action:'Asset Uploaded',details:'GameFuel_Script_v1.docx',user:'Copper',timestamp:'2024-05-19 13:45'},
+  {id:'l7',action:'Asset Status Updated',details:'Channel_Logo_v2.svg → Published',user:'Copper',timestamp:'2024-05-20 16:30'},
+  {id:'l8',action:'Share Link Generated',details:'Logo shared with Brand Manager',user:'Copper',timestamp:'2024-05-20 16:35'},
+  {id:'l9',action:'Project Created',details:'Channel Rebrand 2024',user:'Copper',timestamp:'2024-05-20 09:00'},
+  {id:'l10',action:'Asset Uploaded',details:'Stream_Overlay_v1.png',user:'Copper',timestamp:'2024-05-23 20:15'},
+];
+
+function getLS(k,def){try{const v=localStorage.getItem('cv_'+k);return v?JSON.parse(v):def}catch{return def}}
+function setLS(k,v){try{localStorage.setItem('cv_'+k,JSON.stringify(v))}catch{}}
+
+function initData(){
+  if(!getLS('seeded',false)){
+    setLS('projects',SEED_PROJECTS);
+    setLS('assets',SEED_ASSETS);
+    setLS('versions',SEED_VERSIONS);
+    setLS('shares',SEED_SHARES);
+    setLS('logs',SEED_LOGS);
+    setLS('seeded',true);
+  }
+}
+
+function getProjects(){return getLS('projects',[])}
+function getAssets(){return getLS('assets',[])}
+function getVersions(){return getLS('versions',{})}
+function getShares(){return getLS('shares',[])}
+function getLogs(){return getLS('logs',[])}
+function saveProjects(d){setLS('projects',d)}
+function saveAssets(d){setLS('assets',d)}
+function saveVersions(d){setLS('versions',d)}
+function saveShares(d){setLS('shares',d)}
+function saveLogs(d){setLS('logs',d)}
+
+function addLog(action,details){
+  const logs=getLogs();
+  const now=new Date();
+  const ts=now.toISOString().slice(0,10)+' '+now.toTimeString().slice(0,5);
+  logs.unshift({id:'l'+Date.now(),action,details,user:'Copper',timestamp:ts});
+  saveLogs(logs.slice(0,100));
+}
+
+// ===== ICONS (SVG inline) =====
+const icons={
+  grid:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>`,
+  folder:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
+  file:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
+  git:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg>`,
+  share:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
+  bar:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>`,
+  log:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`,
+  settings:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
+  plus:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+  search:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+  edit:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`,
+  trash:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`,
+  download:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+  copy:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+  bell:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`,
+  upload:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`,
+  x:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  check:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  arrow:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`,
+  trend:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+};
+
+// ===== NOTIFICATION =====
+function showNotif(msg,type='success'){
+  let el=document.getElementById('notif');
+  if(!el){el=document.createElement('div');el.id='notif';el.className='notif';document.body.appendChild(el);}
+  el.innerHTML=`<span style="font-size:16px">${type==='success'?'✓':'✕'}</span> ${msg}`;
+  el.className='notif'+(type==='error'?' error':'');
+  setTimeout(()=>el.classList.add('show'),10);
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+// ===== STATE =====
+let state={
+  page:'dashboard',
+  user:null,
+  modal:null,
+  darkMode:true,
+  search:'',
+  selectedProject:null,
+  versionAsset:null,
+  shareTab:'active',
+  settingsName:'Copper',
+  settingsEmail:'copper@creatorvault.com',
+  settingsChannel:'CopperPlays',
+};
+
+// ===== RENDER =====
+function render(){
+  const app=document.getElementById('app');
+  if(!state.user){app.innerHTML=renderAuth();bindAuth();return;}
+  app.innerHTML=renderLayout();
+  bindLayout();
+}
+
+// ===== AUTH =====
+function renderAuth(){return`
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="auth-logo-icon">🎬</div>
+      <span class="auth-logo-text">CreatorVault</span>
+    </div>
+    <div class="auth-title">Welcome back</div>
+    <div class="auth-sub">Sign in to access your creator workspace</div>
+    <div class="form-group">
+      <label class="form-label">Email Address</label>
+      <input class="form-input" type="email" id="auth-email" placeholder="your@email.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="auth-pass" placeholder="••••••••">
+    </div>
+    <div id="auth-err" style="color:var(--red);font-size:12px;margin-bottom:12px;display:none"></div>
+    <button class="btn btn-primary" id="login-btn">Sign In</button>
+    <button class="btn btn-outline" id="demo-btn">🎮 Demo Login</button>
+    <div class="auth-hint">Demo: <span>copper@creatorvault.com</span> / <span>creator123</span></div>
+  </div>
+</div>`}
+
+function bindAuth(){
+  document.getElementById('login-btn').onclick=()=>doLogin();
+  document.getElementById('demo-btn').onclick=()=>{
+    document.getElementById('auth-email').value='copper@creatorvault.com';
+    document.getElementById('auth-pass').value='creator123';
+    doLogin();
+  };
+  document.getElementById('auth-pass').onkeydown=e=>{if(e.key==='Enter')doLogin()};
+}
+
+function doLogin(){
+  const email=document.getElementById('auth-email').value.trim();
+  const pass=document.getElementById('auth-pass').value;
+  const err=document.getElementById('auth-err');
+  if(email==='copper@creatorvault.com'&&pass==='creator123'){
+    state.user=DEMO_USER;setLS('auth',DEMO_USER);
+    initData();render();
+  }else{
+    err.style.display='block';
+    err.textContent='Invalid email or password. Try the demo credentials.';
+  }
+}
+
+// ===== SIDEBAR ITEMS =====
+const NAV=[
+  {id:'dashboard',label:'Dashboard',icon:'grid'},
+  {id:'projects',label:'Projects',icon:'folder'},
+  {id:'assets',label:'Assets',icon:'file'},
+  {id:'versions',label:'Version Control',icon:'git'},
+  {id:'shares',label:'Share Center',icon:'share'},
+  {id:'analytics',label:'Analytics',icon:'bar'},
+  {id:'logs',label:'Audit Logs',icon:'log'},
+  {id:'settings',label:'Settings',icon:'settings'},
+];
+
+// ===== LAYOUT =====
+function renderLayout(){return`
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">🎬</div>
+      <span class="sidebar-logo-text">CreatorVault</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Main Menu</div>
+        ${NAV.slice(0,5).map(n=>`
+        <button class="nav-item ${state.page===n.id?'active':''}" onclick="nav('${n.id}')">
+          ${icons[n.icon]}<span>${n.label}</span>
+          ${n.id==='shares'?`<span class="nav-badge">${getShares().filter(s=>s.status==='active').length}</span>`:''}
+        </button>`).join('')}
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-label">Insights</div>
+        ${NAV.slice(5).map(n=>`
+        <button class="nav-item ${state.page===n.id?'active':''}" onclick="nav('${n.id}')">
+          ${icons[n.icon]}<span>${n.label}</span>
+        </button>`).join('')}
+      </div>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="user-info">
+        <div class="user-avatar">${state.user.avatar}</div>
+        <div><div class="user-name">${state.user.name}</div><div class="user-role">Creator</div></div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Sign Out</button>
+    </div>
+  </aside>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title">${NAV.find(n=>n.id===state.page)?.label||'Dashboard'}</div>
+      <div class="topbar-right">
+        <div class="search-box">${icons.search}<input placeholder="Search anything..." id="global-search" value="${state.search}" oninput="state.search=this.value;renderContent()"></div>
+        <div class="icon-btn">${icons.bell}</div>
+        <div class="user-avatar" style="width:36px;height:36px;font-size:13px;flex-shrink:0;cursor:pointer">${state.user.avatar}</div>
+      </div>
+    </div>
+    <div class="content" id="content">${renderPage()}</div>
+  </div>
+  ${state.modal?renderModal():''}
+</div>`}
+
+function renderContent(){document.getElementById('content').innerHTML=renderPage()}
+
+function renderPage(){
+  const p=state.page;
+  if(p==='dashboard')return renderDashboard();
+  if(p==='projects')return renderProjects();
+  if(p==='assets')return renderAssets();
+  if(p==='versions')return renderVersions();
+  if(p==='shares')return renderShares();
+  if(p==='analytics')return renderAnalytics();
+  if(p==='logs')return renderLogs();
+  if(p==='settings')return renderSettings();
+  return renderDashboard();
+}
+
+function nav(page){state.page=page;state.search='';render()}
+function logout(){state.user=null;setLS('auth',null);render()}
+
+// ===== DASHBOARD =====
+function renderDashboard(){
+  const projects=getProjects();
+  const assets=getAssets();
+  const shares=getShares().filter(s=>s.status==='active');
+  const versions=Object.values(getVersions()).reduce((a,b)=>a+b.length,0);
+  const activities=[
+    {text:'<strong>Copper</strong> uploaded Stream_Overlay_v1.png',time:'2 hours ago',color:'purple'},
+    {text:'<strong>Thumbnail v3</strong> status changed to Published',time:'5 hours ago',color:'green'},
+    {text:'<strong>Episode_23_Script</strong> version 2 created',time:'Yesterday',color:'blue'},
+    {text:'<strong>Channel logo</strong> shared with Brand Manager',time:'Yesterday',color:'amber'},
+    {text:'<strong>GameFuel Campaign</strong> project created',time:'3 days ago',color:'purple'},
+    {text:'<strong>Roblox Moments</strong> thumbnail approved',time:'4 days ago',color:'green'},
+  ];
+  return`
+  <div class="stats-grid">
+    ${[
+      {label:'Total Projects',value:projects.length,icon:'🗂️',color:'purple',change:'+2 this week'},
+      {label:'Total Assets',value:assets.length,icon:'📁',color:'blue',change:'+5 this month'},
+      {label:'Shared Assets',value:shares.length,icon:'🔗',color:'green',change:'+1 today'},
+      {label:'Total Versions',value:versions,icon:'⚡',color:'amber',change:'+3 this week'},
+    ].map(s=>`
+    <div class="stat-card ${s.color}">
+      <div class="stat-icon ${s.color}">${s.icon}</div>
+      <div class="stat-value">${s.value}</div>
+      <div class="stat-label">${s.label}</div>
+      <div class="stat-change up">↑ ${s.change}</div>
+    </div>`).join('')}
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title"><span class="card-title-left">🔔 Recent Activity</span></div>
+      <div class="activity-feed">
+        ${activities.map(a=>`
+        <div class="activity-item">
+          <div class="activity-dot ${a.color}"></div>
+          <div>
+            <div class="activity-text">${a.text}</div>
+            <div class="activity-time">${a.time}</div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <span class="card-title-left">📁 Recent Projects</span>
+        <button class="add-btn" onclick="nav('projects')" style="padding:7px 14px;font-size:12px">View All</button>
+      </div>
+      ${projects.slice(0,4).map(p=>`
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="nav('assets')">
+        <div style="width:38px;height:38px;border-radius:8px;background:var(--bg5);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">🎬</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:2px">${p.assets} assets · ${p.category}</div>
+        </div>
+        <div style="color:var(--text3);flex-shrink:0">${icons.arrow}</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ===== PROJECTS =====
+function renderProjects(){
+  const q=state.search.toLowerCase();
+  const projects=getProjects().filter(p=>!q||p.name.toLowerCase().includes(q)||p.category.toLowerCase().includes(q));
+  return`
+  <div class="page-header">
+    <div><div class="page-title">Projects</div><div class="page-sub">${getProjects().length} total projects</div></div>
+    <button class="add-btn" onclick="openModal('createProject')">${icons.plus} New Project</button>
+  </div>
+  <div class="search-bar">${icons.search}<input placeholder="Search projects..." value="${state.search}" oninput="state.search=this.value;renderContent()"></div>
+  ${projects.length===0?`<div class="empty-state"><div class="empty-icon">📁</div><div class="empty-title">No projects found</div><div class="empty-sub">${state.search?'No projects match your search.':'Create your first project to get started.'}</div></div>`:`
+  <div class="projects-grid">
+    ${projects.map(p=>`
+    <div class="project-card">
+      <div class="project-card-top">
+        <span class="project-badge ${p.color}">${p.category}</span>
+        <div style="display:flex;gap:4px">
+          <button class="icon-btn" style="width:28px;height:28px" title="Edit" onclick="openModal('editProject','${p.id}')">${icons.edit}</button>
+          <button class="icon-btn" style="width:28px;height:28px;color:var(--red)" title="Delete" onclick="deleteProject('${p.id}')">${icons.trash}</button>
+        </div>
+      </div>
+      <div class="project-name">${p.name}</div>
+      <div class="project-desc">${p.desc}</div>
+      <div class="project-meta">
+        <span>📁 ${p.assets} assets</span>
+        <span>📅 ${p.createdAt}</span>
+      </div>
+      <div class="project-actions">
+        <button class="action-btn" onclick="state.selectedProject='${p.id}';nav('assets')">View Assets</button>
+        <button class="action-btn" onclick="openModal('addVersion',null,'${p.id}')">Add Version</button>
+      </div>
+    </div>`).join('')}
+  </div>`}`;
+}
+
+function deleteProject(id){
+  if(!confirm('Delete this project?'))return;
+  const projects=getProjects().filter(p=>p.id!==id);
+  saveProjects(projects);
+  const proj=getProjects().find(p=>p.id===id);
+  addLog('Project Deleted',proj?.name||'Project');
+  showNotif('Project deleted');renderContent();
+}
+
+// ===== ASSETS =====
+const ASSET_TYPES=['Thumbnail','Script','Video Clip','Logo','Audio'];
+const ASSET_STATUSES=['Draft','Review','Approved','Published'];
+const typeIcon={Thumbnail:'🖼️',Script:'📝','Video Clip':'🎬',Logo:'✨',Audio:'🎵'};
+const typeClass={Thumbnail:'type-thumbnail',Script:'type-script','Video Clip':'type-video',Logo:'type-logo',Audio:'type-audio'};
+
+function renderAssets(){
+  const projects=getProjects();
+  const q=state.search.toLowerCase();
+  let assets=getAssets();
+  if(state.selectedProject){assets=assets.filter(a=>a.projectId===state.selectedProject)}
+  if(q){assets=assets.filter(a=>a.name.toLowerCase().includes(q)||a.type.toLowerCase().includes(q))}
+  const projMap={};projects.forEach(p=>projMap[p.id]=p.name);
+  return`
+  <div class="page-header">
+    <div><div class="page-title">Assets</div><div class="page-sub">${assets.length} assets${state.selectedProject?' in this project':''}</div></div>
+    <div style="display:flex;gap:10px;align-items:center">
+      ${state.selectedProject?`<button class="action-btn" onclick="state.selectedProject=null;renderContent()" style="padding:9px 14px">All Projects</button>`:''}
+      <button class="add-btn" onclick="openModal('uploadAsset')">${icons.upload} Upload Asset</button>
+    </div>
+  </div>
+  <div class="search-bar">${icons.search}<input placeholder="Search assets..." value="${state.search}" oninput="state.search=this.value;renderContent()"></div>
+  ${assets.length===0?`<div class="empty-state"><div class="empty-icon">📁</div><div class="empty-title">No assets found</div><div class="empty-sub">Upload your first asset to get started.</div></div>`:`
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Asset</th><th>Project</th><th>Type</th><th>Status</th><th>Versions</th><th>Size</th><th>Uploaded</th><th>Actions</th>
+        </tr></thead>
+        <tbody>
+          ${assets.map(a=>`
+          <tr>
+            <td>
+              <div style="display:flex;align-items:center;gap:10px">
+                <div class="asset-type-icon ${typeClass[a.type]}">${typeIcon[a.type]||'📄'}</div>
+                <div>
+                  <div style="font-size:13px;font-weight:500">${a.name}</div>
+                  <div style="font-size:11px;color:var(--text3)">${a.uploadDate}</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="chip">${projMap[a.projectId]||'Unknown'}</span></td>
+            <td><span style="font-size:12px;color:var(--text2)">${a.type}</span></td>
+            <td><span class="status status-${a.status.toLowerCase()}">${a.status}</span></td>
+            <td>
+              <span style="font-size:12px;font-weight:600;color:var(--purple3)">${a.versions}</span>
+              <span style="font-size:11px;color:var(--text3);margin-left:4px">version${a.versions!==1?'s':''}</span>
+            </td>
+            <td><span style="font-size:12px;color:var(--text2)">${a.size}</span></td>
+            <td><span style="font-size:12px;color:var(--text2)">${a.uploadDate}</span></td>
+            <td>
+              <div style="display:flex;gap:4px">
+                <button class="icon-btn" style="width:28px;height:28px" title="Edit" onclick="openModal('editAsset','${a.id}')">${icons.edit}</button>
+                <button class="icon-btn" style="width:28px;height:28px" title="Download" onclick="showNotif('Downloading ${a.name}')">${icons.download}</button>
+                <button class="icon-btn" style="width:28px;height:28px" title="Share" onclick="openModal('shareAsset','${a.id}')">${icons.share}</button>
+                <button class="icon-btn" style="width:28px;height:28px;color:var(--red)" title="Delete" onclick="deleteAsset('${a.id}')">${icons.trash}</button>
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`}`;
+}
+
+function deleteAsset(id){
+  if(!confirm('Delete this asset?'))return;
+  const asset=getAssets().find(a=>a.id===id);
+  saveAssets(getAssets().filter(a=>a.id!==id));
+  addLog('Asset Deleted',asset?.name||'Asset');
+  showNotif('Asset deleted');renderContent();
+}
+
+// ===== VERSION CONTROL =====
+function renderVersions(){
+  const assets=getAssets();
+  const versions=getVersions();
+  const selectedId=state.versionAsset||(assets[0]?.id||null);
+  const selAsset=assets.find(a=>a.id===selectedId);
+  const vList=selectedId?(versions[selectedId]||[]):[];
+  return`
+  <div class="page-header">
+    <div><div class="page-title">Version Control</div><div class="page-sub">Track asset history and revisions</div></div>
+    <button class="add-btn" onclick="openModal('addVersionModal','${selectedId}')">${icons.plus} Add Version</button>
+  </div>
+  <div class="two-col">
+    <div class="card" style="max-height:600px;overflow-y:auto">
+      <div class="card-title">Assets</div>
+      ${assets.map(a=>`
+      <div onclick="state.versionAsset='${a.id}';renderContent()" style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--radius2);cursor:pointer;margin-bottom:4px;background:${a.id===selectedId?'var(--purpleGlow)':'none'};border:1px solid ${a.id===selectedId?'var(--purple)30':'transparent'}">
+        <div class="asset-type-icon ${typeClass[a.type]}" style="width:28px;height:28px;font-size:13px">${typeIcon[a.type]||'📄'}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.name}</div>
+          <div style="font-size:10px;color:var(--text3)">${versions[a.id]?.length||0} version${(versions[a.id]?.length||0)!==1?'s':''}</div>
+        </div>
+        ${a.id===selectedId?`<div style="color:var(--purple3);width:14px;height:14px">${icons.arrow}</div>`:''}
+      </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="card-title">
+        <span class="card-title-left">⚡ ${selAsset?.name||'Select an asset'}</span>
+        ${selectedId?`<span class="chip">${vList.length} version${vList.length!==1?'s':''}</span>`:''}
+      </div>
+      ${vList.length===0?`<div class="empty-state" style="padding:30px"><div class="empty-icon">⚡</div><div class="empty-title">No versions yet</div><div class="empty-sub">Add a version to start tracking history</div></div>`:
+      `<div class="version-timeline">
+        ${[...vList].reverse().map((v,i)=>`
+        <div class="version-item">
+          <div class="version-dot ${i===0?'latest':''}"></div>
+          <div class="version-box">
+            <div class="version-num">
+              v${v.version} 
+              ${i===0?`<span class="status status-published" style="font-size:10px">Latest</span>`:''}
+            </div>
+            <div class="version-date">📅 ${v.date} · by ${v.uploadedBy}</div>
+            ${v.note?`<div class="version-note">${v.note}</div>`:''}
+          </div>
+        </div>`).join('')}
+      </div>`}
+    </div>
+  </div>`;
+}
+
+// ===== SHARE CENTER =====
+function renderShares(){
+  const shares=getShares();
+  const active=shares.filter(s=>s.status==='active');
+  const expired=shares.filter(s=>s.status==='expired');
+  const list=state.shareTab==='active'?active:expired;
+  return`
+  <div class="page-header">
+    <div><div class="page-title">Share Center</div><div class="page-sub">Manage your shared asset links</div></div>
+    <button class="add-btn" onclick="openModal('createShare')">${icons.plus} Create Share Link</button>
+  </div>
+  <div class="tabs">
+    <button class="tab ${state.shareTab==='active'?'active':''}" onclick="state.shareTab='active';renderContent()">Active Links (${active.length})</button>
+    <button class="tab ${state.shareTab==='expired'?'active':''}" onclick="state.shareTab='expired';renderContent()">Expired (${expired.length})</button>
+  </div>
+  ${list.length===0?`<div class="empty-state"><div class="empty-icon">🔗</div><div class="empty-title">No ${state.shareTab} links</div><div class="empty-sub">Create share links to collaborate with others.</div></div>`:`
+  <div style="display:flex;flex-direction:column;gap:12px">
+    ${list.map(s=>`
+    <div class="card" style="padding:16px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px">
+        <div>
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px">${s.assetName}</div>
+          <div style="font-size:12px;color:var(--text2)">Shared with: <strong>${s.sharedWith}</strong> · Expires: ${s.expiryDate}</div>
+        </div>
+        <span class="status status-${s.status}">${s.status}</span>
+      </div>
+      <div class="share-link-box">
+        <span class="share-link-text">creatorvault.app/share/${s.code}</span>
+        <button class="copy-btn" onclick="copyLink('${s.code}')">Copy Link</button>
+      </div>
+    </div>`).join('')}
+  </div>`}`;
+}
+
+function copyLink(code){
+  navigator.clipboard?.writeText?.('https://creatorvault.app/share/'+code);
+  showNotif('Link copied to clipboard!');
+}
+
+// ===== ANALYTICS =====
+function renderAnalytics(){
+  const assets=getAssets();
+  const typeCounts={Thumbnail:0,Script:0,'Video Clip':0,Logo:0,Audio:0};
+  assets.forEach(a=>{if(typeCounts[a.type]!==undefined)typeCounts[a.type]++});
+  const months=['Jan','Feb','Mar','Apr','May','Jun'];
+  const uploads=[2,4,3,7,5,10];
+  const maxU=Math.max(...uploads);
+  const colors=['var(--purple2)','var(--blue2)','var(--green)','var(--amber)','var(--red)'];
+  const typeEntries=Object.entries(typeCounts);
+  const total=assets.length||1;
+  return`
+  <div class="page-header">
+    <div><div class="page-title">Analytics</div><div class="page-sub">Insights into your creator workflow</div></div>
+  </div>
+  <div class="stats-grid" style="margin-bottom:24px">
+    ${[
+      {label:'Avg Assets/Project',value:(assets.length/Math.max(getProjects().length,1)).toFixed(1),icon:'📊',color:'purple'},
+      {label:'Published Assets',value:assets.filter(a=>a.status==='Published').length,icon:'✅',color:'green'},
+      {label:'In Review',value:assets.filter(a=>a.status==='Review').length,icon:'🔍',color:'amber'},
+      {label:'Draft Assets',value:assets.filter(a=>a.status==='Draft').length,icon:'📝',color:'blue'},
+    ].map(s=>`
+    <div class="stat-card ${s.color}">
+      <div class="stat-icon ${s.color}">${s.icon}</div>
+      <div class="stat-value">${s.value}</div>
+      <div class="stat-label">${s.label}</div>
+    </div>`).join('')}
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">📈 Upload Trends (2024)</div>
+      <div class="chart-bar">
+        ${uploads.map((v,i)=>`
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center">
+          <div class="bar" style="height:${(v/maxU)*100}%;background:linear-gradient(180deg,var(--purple2),var(--blue));width:100%;border-radius:4px 4px 0 0" title="${v} uploads"></div>
+          <div class="bar-label">${months[i]}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🗂️ Assets by Type</div>
+      <div style="margin-top:8px">
+        ${typeEntries.map((e,i)=>`
+        <div style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+            <span style="color:var(--text2)">${e[0]}</span>
+            <span style="font-weight:600;color:${colors[i]}">${e[1]}</span>
+          </div>
+          <div style="background:var(--bg5);border-radius:4px;height:6px;overflow:hidden">
+            <div style="height:100%;border-radius:4px;background:${colors[i]};width:${(e[1]/total*100)||2}%;transition:width 0.5s"></div>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">📅 Project Activity</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:8px">
+      ${getProjects().slice(0,4).map((p,i)=>`
+      <div style="background:var(--bg4);border:1px solid var(--border);border-radius:var(--radius2);padding:14px">
+        <div style="font-size:12px;font-weight:600;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+        <div style="font-size:24px;font-weight:700;font-family:'Space Grotesk',sans-serif;color:${colors[i]}">${p.assets}</div>
+        <div style="font-size:11px;color:var(--text3)">assets</div>
+      </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+// ===== LOGS =====
+const logColors={
+  'Project Created':'purple','Asset Uploaded':'blue','Asset Deleted':'red',
+  'Version Added':'green','Asset Shared':'amber','Share Link Generated':'amber',
+  'Asset Status Updated':'blue','Project Deleted':'red',
+};
+
+function renderLogs(){
+  const q=state.search.toLowerCase();
+  let logs=getLogs();
+  if(q)logs=logs.filter(l=>l.action.toLowerCase().includes(q)||l.details.toLowerCase().includes(q));
+  return`
+  <div class="page-header">
+    <div><div class="page-title">Audit Logs</div><div class="page-sub">Complete activity history</div></div>
+  </div>
+  <div class="search-bar">${icons.search}<input placeholder="Search logs..." value="${state.search}" oninput="state.search=this.value;renderContent()"></div>
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Action</th><th>Details</th><th>User</th><th>Timestamp</th></tr></thead>
+        <tbody>
+          ${logs.length===0?`<tr><td colspan="5"><div class="empty-state" style="padding:30px">No logs found</div></td></tr>`:
+          logs.map((l,i)=>`
+          <tr>
+            <td style="color:var(--text3);font-size:11px">${i+1}</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:6px;height:6px;border-radius:50%;background:var(--${logColors[l.action]||'purple'}2);flex-shrink:0"></div>
+                <span style="font-size:13px;font-weight:500">${l.action}</span>
+              </div>
+            </td>
+            <td style="font-size:12px;color:var(--text2);max-width:200px">${l.details}</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:6px">
+                <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700">CP</div>
+                <span style="font-size:12px">${l.user}</span>
+              </div>
+            </td>
+            <td style="font-size:11px;color:var(--text3);white-space:nowrap">${l.timestamp}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+// ===== SETTINGS =====
+function renderSettings(){
+  return`
+  <div class="page-header">
+    <div><div class="page-title">Settings</div><div class="page-sub">Manage your account and preferences</div></div>
+    <button class="add-btn" onclick="saveSettings()">Save Changes</button>
+  </div>
+  <div style="max-width:640px">
+    <div class="card settings-section">
+      <div class="settings-section-title">👤 User Profile</div>
+      <div class="form-group"><label class="form-label">Display Name</label><input class="form-input" id="s-name" value="${state.settingsName}"></div>
+      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" id="s-email" value="${state.settingsEmail}" type="email"></div>
+      <div class="form-group"><label class="form-label">Creator Channel</label><input class="form-input" id="s-channel" value="${state.settingsChannel}" placeholder="Your channel name"></div>
+    </div>
+    <div class="card settings-section">
+      <div class="settings-section-title">🎨 Appearance</div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-label">Dark Mode</div>
+          <div class="settings-sub">Use dark theme across the platform</div>
+        </div>
+        <button class="toggle ${state.darkMode?'on':''}" id="dark-toggle" onclick="state.darkMode=!state.darkMode;document.getElementById('dark-toggle').className='toggle '+(state.darkMode?'on':'')"></button>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-label">Compact View</div>
+          <div class="settings-sub">Show more content with reduced spacing</div>
+        </div>
+        <button class="toggle" onclick="showNotif('Preference saved')"></button>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-label">Email Notifications</div>
+          <div class="settings-sub">Get notified when assets are shared or updated</div>
+        </div>
+        <button class="toggle on" onclick="showNotif('Preference saved')"></button>
+      </div>
+    </div>
+    <div class="card settings-section">
+      <div class="settings-section-title">💾 Storage Statistics</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+        <div style="background:var(--bg4);border-radius:var(--radius2);padding:14px;text-align:center">
+          <div style="font-size:22px;font-weight:700;font-family:'Space Grotesk',sans-serif;color:var(--purple3)">3.8 GB</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">Used Storage</div>
+        </div>
+        <div style="background:var(--bg4);border-radius:var(--radius2);padding:14px;text-align:center">
+          <div style="font-size:22px;font-weight:700;font-family:'Space Grotesk',sans-serif;color:var(--blue2)">16.2 GB</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">Available</div>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:8px;display:flex;justify-content:space-between">
+        <span>3.8 GB of 20 GB used</span>
+        <span style="color:var(--green)">19% used</span>
+      </div>
+      <div class="storage-bar"><div class="storage-fill" style="width:19%"></div></div>
+    </div>
+    <div class="card settings-section" style="border-color:var(--red)30">
+      <div class="settings-section-title" style="color:var(--red)">⚠️ Danger Zone</div>
+      <div class="settings-row">
+        <div>
+          <div class="settings-label">Clear All Data</div>
+          <div class="settings-sub">Permanently delete all projects and assets</div>
+        </div>
+        <button onclick="clearData()" style="padding:8px 16px;background:var(--red)20;border:1px solid var(--red)40;border-radius:var(--radius2);color:var(--red);font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif">Clear Data</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function saveSettings(){
+  const n=document.getElementById('s-name')?.value;
+  const e=document.getElementById('s-email')?.value;
+  const c=document.getElementById('s-channel')?.value;
+  if(n)state.settingsName=n;
+  if(e)state.settingsEmail=e;
+  if(c)state.settingsChannel=c;
+  showNotif('Settings saved successfully');
+}
+
+function clearData(){
+  if(!confirm('This will reset all data to defaults. Continue?'))return;
+  setLS('seeded',false);initData();showNotif('Data reset to defaults');render();
+}
+
+// ===== MODAL =====
+function renderModal(){
+  const m=state.modal;
+  return`<div class="modal-overlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">${renderModalContent(m)}</div>
+  </div>`;
+}
+
+function renderModalContent(m){
+  if(m.type==='createProject')return renderCreateProject();
+  if(m.type==='editProject')return renderEditProject(m.id);
+  if(m.type==='uploadAsset')return renderUploadAsset();
+  if(m.type==='editAsset')return renderEditAsset(m.id);
+  if(m.type==='addVersionModal')return renderAddVersion(m.id);
+  if(m.type==='createShare')return renderCreateShare();
+  if(m.type==='shareAsset')return renderShareAsset(m.id);
+  return '';
+}
+
+function openModal(type,id,extra){state.modal={type,id,extra};render()}
+function closeModal(){state.modal=null;render()}
+
+function renderCreateProject(){
+  const cats=['YouTube Video','YouTube Shorts','Instagram Reel','Stream Content','Sponsorship','Branding'];
+  return`
+  <div class="modal-title">✨ Create New Project<button class="modal-close" onclick="closeModal()">${icons.x}</button></div>
+  <div class="form-group"><label class="form-label">Project Name</label><input class="form-input" id="m-name" placeholder="My Awesome Project"></div>
+  <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="m-desc" placeholder="What's this project about?"></textarea></div>
+  <div class="form-group"><label class="form-label">Category</label>
+    <select class="form-select" id="m-cat">
+      ${cats.map(c=>`<option>${c}</option>`).join('')}
+    </select>
+  </div>
+  <div class="modal-actions">
+    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+    <button class="modal-btn primary" onclick="createProject()">Create Project</button>
+  </div>`;
+}
+
+function createProject(){
+  const name=document.getElementById('m-name')?.value?.trim();
+  const desc=document.getElementById('m-desc')?.value?.trim();
+  const cat=document.getElementById('m-cat')?.value;
+  if(!name){showNotif('Please enter a project name','error');return;}
+  const catClass={'YouTube Video':'badge-youtube','YouTube Shorts':'badge-short','Instagram Reel':'badge-instagram','Stream Content':'badge-stream','Sponsorship':'badge-sponsor','Branding':'badge-brand'};
+  const projects=getProjects();
+  const newP={id:'p'+Date.now(),name,desc:desc||'No description',category:cat,createdAt:new Date().toISOString().slice(0,10),assets:0,color:catClass[cat]||'badge-youtube'};
+  projects.push(newP);saveProjects(projects);
+  addLog('Project Created',name);
+  showNotif('Project created!');closeModal();state.page='projects';render();
+}
+
+function renderEditProject(id){
+  const p=getProjects().find(x=>x.id===id);
+  if(!p)return'<div>Project not found</div>';
+  const cats=['YouTube Video','YouTube Shorts','Instagram Reel','Stream Content','Sponsorship','Branding'];
+  return`
+  <div class="modal-title">✏️ Edit Project<button class="modal-close" onclick="closeModal()">${icons.x}</button></div>
+  <div class="form-group"><label class="form-label">Project Name</label><input class="form-input" id="m-name" value="${p.name}"></div>
+  <div class="form-group"><label class="form-label">Description</label><textarea class="form-textarea" id="m-desc">${p.desc}</textarea></div>
+  <div class="form-group"><label class="form-label">Category</label>
+    <select class="form-select" id="m-cat">
+      ${cats.map(c=>`<option ${c===p.category?'selected':''}>${c}</option>`).join('')}
+    </select>
+  </div>
+  <div class="modal-actions">
+    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+    <button class="modal-btn primary" onclick="editProject('${id}')">Save Changes</button>
+  </div>`;
+}
+
+function editProject(id){
+  const name=document.getElementById('m-name')?.value?.trim();
+  const desc=document.getElementById('m-desc')?.value?.trim();
+  const cat=document.getElementById('m-cat')?.value;
+  if(!name){showNotif('Project name required','error');return;}
+  const catClass={'YouTube Video':'badge-youtube','YouTube Shorts':'badge-short','Instagram Reel':'badge-instagram','Stream Content':'badge-stream','Sponsorship':'badge-sponsor','Branding':'badge-brand'};
+  const projects=getProjects().map(p=>p.id===id?{...p,name,desc:desc||p.desc,category:cat,color:catClass[cat]||p.color}:p);
+  saveProjects(projects);addLog('Project Updated',name);showNotif('Project updated!');closeModal();render();
+}
+
+function renderUploadAsset(){
+  const projects=getProjects();
+  return`
+  <div class="modal-title">⬆️ Upload Asset<button class="modal-close" onclick="closeModal()">${icons.x}</button></div>
+  <div class="form-group"><label class="form-label">Asset Name</label><input class="form-input" id="m-aname" placeholder="thumbnail_v1.png"></div>
+  <div class="form-group"><label class="form-label">Project</label>
+    <select class="form-select" id="m-aproj">
+      ${projects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('')}
+    </select>
+  </div>
+  <div class="form-group"><label class="form-label">Asset Type</label>
+    <select class="form-select" id="m-atype">
+      ${ASSET_TYPES.map(t=>`<option>${t}</option>`).join('')}
+    </select>
+  </div>
+  <div class="form-group"><label class="form-label">Status</label>
+    <select class="form-select" id="m-astat">
+      ${ASSET_STATUSES.map(s=>`<option>${s}</option>`).join('')}
+    </select>
+  </div>
+  <div class="form-group"><label class="form-label">File Upload</label>
+    <div style="border:2px dashed var(--border2);border-radius:var(--radius2);padding:24px;text-align:center;cursor:pointer" onclick="document.getElementById('file-input').click()">
+      <input type="file" id="file-input" style="display:none" onchange="handleFileSelect(this)">
+      <div style="font-size:24px;margin-bottom:8px">📎</div>
+      <div style="font-size:13px;color:var(--text2)">Click to browse or drag & drop</div>
+      <div id="file-name" style="font-size:12px;color:var(--purple3);margin-top:6px"></div>
+    </div>
+  </div>
+  <div class="modal-actions">
+    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+    <button class="modal-btn primary" onclick="uploadAsset()">Upload Asset</button>
+  </div>`;
+}
+
+function handleFileSelect(input){
+  const f=input.files?.[0];
+  if(f){
+    document.getElementById('file-name').textContent='📄 '+f.name;
+    const nameField=document.getElementById('m-aname');
+    if(!nameField.value)nameField.value=f.name;
+  }
+}
+
+function uploadAsset(){
+  const name=document.getElementById('m-aname')?.value?.trim();
+  const projId=document.getElementById('m-aproj')?.value;
+  const type=document.getElementById('m-atype')?.value;
+  const status=document.getElementById('m-astat')?.value;
+  if(!name){showNotif('Asset name required','error');return;}
+  const assets=getAssets();
+  const today=new Date().toISOString().slice(0,10);
+  const newA={id:'a'+Date.now(),projectId:projId,name,type,status,uploadDate:today,size:'—',versions:1};
+  assets.push(newA);saveAssets(assets);
+  const projects=getProjects().map(p=>p.id===projId?{...p,assets:p.assets+1}:p);saveProjects(projects);
+  addLog('Asset Uploaded',name);showNotif('Asset uploaded!');closeModal();render();
+}
+
+function renderEditAsset(id){
+  const a=getAssets().find(x=>x.id===id);
+  if(!a)return'';
+  return`
+  <div class="modal-title">✏️ Edit Asset<button class="modal-close" onclick="closeModal()">${icons.x}</button></div>
+  <div class="form-group"><label class="form-label">Asset Name</label><input class="form-input" id="m-aname" value="${a.name}"></div>
+  <div class="form-group"><label class="form-label">Type</label>
+    <select class="form-select" id="m-atype">
+      ${ASSET_TYPES.map(t=>`<option ${t===a.type?'selected':''}>${t}</option>`).join('')}
+    </select>
+  </div>
+  <div class="form-group"><label class="form-label">Status</label>
+    <select class="form-select" id="m-astat">
+      ${ASSET_STATUSES.map(s=>`<option ${s===a.status?'selected':''}>${s}</option>`).join('')}
+    </select>
+  </div>
+  <div class="modal-actions">
+    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+    <button class="modal-btn primary" onclick="editAsset('${id}')">Save Changes</button>
+  </div>`;
+}
+
+function editAsset(id){
+  const name=document.getElementById('m-aname')?.value?.trim();
+  const type=document.getElementById('m-atype')?.value;
+  const status=document.getElementById('m-astat')?.value;
+  if(!name){showNotif('Name required','error');return;}
+  const assets=getAssets().map(a=>a.id===id?{...a,name,type,status}:a);
+  saveAssets(assets);addLog('Asset Status Updated',`${name} → ${status}`);showNotif('Asset updated!');closeModal();render();
+}
+
+function renderAddVersion(assetId){
+  const a=getAssets().find(x=>x.id===assetId);
+  const versions=getVersions();
+  const vList=versions[assetId]||[];
+  return`
+  <div class="modal-title">⚡ Add Version<button class="modal-close" onclick="closeModal()">${icons.x}</button></div>
+  ${a?`<div style="background:var(--bg4);border-radius:var(--radius2);padding:10px 14px;margin-bottom:20px;font-size:13px;color:var(--text2)">Asset: <strong style="color:var(--text)">${a.name}</strong> · Version ${vList.length+1}</div>`:''}
+  <div class="form-group"><label class="form-label">Version Notes</label><textarea class="form-textarea" id="m-vnote" placeholder="Describe what changed in this version..."></textarea></div>
+  <div class="modal-actions">
+    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+    <button class="modal-btn primary" onclick="addVersionEntry('${assetId}')">Add Version</button>
+  </div>`;
+}
+
+function addVersionEntry(assetId){
+  const note=document.getElementById('m-vnote')?.value?.trim();
+  const versions=getVersions();
+  const vList=versions[assetId]||[];
+  const newV={version:vList.length+1,date:new Date().toISOString().slice(0,10),note:note||'New version',uploadedBy:'Copper'};
+  versions[assetId]=[...vList,newV];saveVersions(versions);
+  const assets=getAssets().map(a=>a.id===assetId?{...a,versions:vList.length+1}:a);saveAssets(assets);
+  addLog('Version Added',`v${newV.version} added`);showNotif('Version added!');closeModal();state.page='versions';state.versionAsset=assetId;render();
+}
+
+function renderCreateShare(){
+  const assets=getAssets();
+  return`
+  <div class="modal-title">🔗 Create Share Link<button class="modal-close" onclick="closeModal()">${icons.x}</button></div>
+  <div class="form-group"><label class="form-label">Asset</label>
+    <select class="form-select" id="m-shasset">
+      ${assets.map(a=>`<option value="${a.id}">${a.name}</option>`).join('')}
+    </select>
+  </div>
+  <div class="form-group"><label class="form-label">Share With</label><input class="form-input" id="m-shwith" placeholder="Editor name or email"></div>
+  <div class="form-group"><label class="form-label">Expiry Date</label><input class="form-input" id="m-shexp" type="date" value="${new Date(Date.now()+30*86400000).toISOString().slice(0,10)}"></div>
+  <div class="modal-actions">
+    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+    <button class="modal-btn primary" onclick="createShare()">Generate Link</button>
+  </div>`;
+}
+
+function renderShareAsset(assetId){
+  const a=getAssets().find(x=>x.id===assetId);
+  return`
+  <div class="modal-title">🔗 Share Asset<button class="modal-close" onclick="closeModal()">${icons.x}</button></div>
+  ${a?`<div style="background:var(--bg4);border-radius:var(--radius2);padding:10px 14px;margin-bottom:20px;font-size:13px;color:var(--text2)">Asset: <strong style="color:var(--text)">${a.name}</strong></div>`:''}
+  <div class="form-group"><label class="form-label">Share With</label><input class="form-input" id="m-shwith" placeholder="Editor name or email"></div>
+  <div class="form-group"><label class="form-label">Expiry Date</label><input class="form-input" id="m-shexp" type="date" value="${new Date(Date.now()+30*86400000).toISOString().slice(0,10)}"></div>
+  <div class="modal-actions">
+    <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+    <button class="modal-btn primary" onclick="createShareForAsset('${assetId}')">Generate Link</button>
+  </div>`;
+}
+
+function createShare(){
+  const assetId=document.getElementById('m-shasset')?.value;
+  createShareForAsset(assetId);
+}
+
+function createShareForAsset(assetId){
+  const sharedWith=document.getElementById('m-shwith')?.value?.trim();
+  const expiryDate=document.getElementById('m-shexp')?.value;
+  if(!sharedWith){showNotif('Please specify who to share with','error');return;}
+  const asset=getAssets().find(a=>a.id===assetId);
+  const code=Math.random().toString(36).slice(2,8).toUpperCase();
+  const shares=getShares();
+  shares.push({id:'sh'+Date.now(),assetId,assetName:asset?.name||'Asset',sharedWith,expiryDate,createdAt:new Date().toISOString().slice(0,10),code,status:'active'});
+  saveShares(shares);
+  addLog('Share Link Generated',`${asset?.name} shared with ${sharedWith}`);
+  showNotif('Share link created!');closeModal();state.page='shares';render();
+}
+
+// ===== BIND LAYOUT =====
+function bindLayout(){
+  // keyboard shortcut
+  document.onkeydown=e=>{if(e.key==='Escape'&&state.modal){closeModal()}};
+}
+
+// ===== INIT =====
+(function(){
+  const auth=getLS('auth',null);
+  if(auth){state.user=auth;initData();}
+  render();
+})();
+</script>
+</body>
+</html>
